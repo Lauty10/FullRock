@@ -1,7 +1,6 @@
 const usuariosModelo=require("../modelos/usuariosSchema")
 const {resultVerify}=require("express-validator")
 const{ validationResult }=require("express-validator");
-const modeloProducto = require("../modelos/productoSchema");
 let bcrypt = require('bcryptjs');
 
 
@@ -42,7 +41,7 @@ const postUsers=async(req,res)=>{
 
     }else{
 
-    const newUser= new modeloProducto(req.body)
+    const newUser= new usuariosModelo(req.body)
 
     let saltPass= bcrypt.genSaltSync(10)
 
