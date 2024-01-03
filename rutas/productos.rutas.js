@@ -1,19 +1,15 @@
 const express=require("express")
 const rutas=express.Router()
-const{getProducts,postProducts}=require("../controladores/productos.controladores")
+const{getProducts,getProductOne,postProducts,putProducts,deleteProduct}=require("../controladores/productos.controladores")
 
 rutas.get("/",getProducts)
 
+rutas.get("/:id",getProductOne)
+
 rutas.post("/",postProducts)
 
+rutas.put("/:id",putProducts)
 
-rutas.put("/",(req,res)=>{
-    res.json("Metodo put")
-})
-
-
-rutas.delete("/",(req,res)=>{
-    res.json("Metodo delete")
-})
+rutas.delete("/:id",deleteProduct)
 
 module.exports=rutas

@@ -6,9 +6,20 @@ const getProducts= async(req,res)=>{
         const getAllProducts= await modeloProducto.find()
         res.status(200).json({mensaje:"Productos encontrados:",getAllProducts})
     } catch (error) {
-        res.status(400).json({mensaje:"No se encontraron productos",error})
+        res.status(500).json({mensaje:"No se encontraron productos",error})
     }
 }
+
+
+const getProductOne= async (req,res)=>{
+    try {
+        const getAllProductsOne= await modeloProducto.findOne({_id:req.params.id})
+        res.status(200).json({mensaje:"Producto encontrado:",getAllProductsOne})
+    } catch (error) {
+        res.status(500).json({mensaje:"No se encontraron productos",error})
+    }
+}
+
 
 
 const postProducts=(req,res)=>{
@@ -28,7 +39,30 @@ const postProducts=(req,res)=>{
     }
 }
 
+const putProducts= async(req,res)=>{
+    try {
+        const updateProduct= await modeloProducto.findByIdAndUpdate({_id:req.params.id},req.body,{new:true})
+        res.status(200).json({mensaje:'Producto actualizado correctamente',updateProduct})
+    } catch (error) {
+        res.status(500).json({mensaje:"ERROR",error})
+    }
+}
+
+
+const deleteProduct= async (req,res)=>{
+    try {
+        const deleteProduct= await modeloProducto.findByIdAndDelete({_id:req.params.id})
+        res.status(200).json({mensaje:'Producto eliminado correctamente',deleteProduct})
+    } catch (error) {
+        res.status(500).json({mensaje:"ERROR",error})
+    }
+}
+
+
 module.exports={
     getProducts,
-    postProducts
+    getProductOne,
+    postProducts,
+    putProducts,
+    deleteProduct
 }

@@ -1,26 +1,22 @@
 const express=require("express")
 const rutas = express.Router()
+const {getUsers,getUsersOne,postUsers,deleteUsers,putUsers}=require("../controladores/usuarios.controladores")
 
-rutas.get("/",(req,res)=>{
-    res.json("Metodo get")
-})
-
-
-rutas.post("/",(req,res)=>{
-    res.json("Metodo post")
-})
+rutas.get("/",getUsers)
 
 
+rutas.get("/:id",getUsersOne)
 
-rutas.put("/",(req,res)=>{
-    res.json("Metodo put")
-})
+
+rutas.post("/",postUsers)
 
 
 
-rutas.delete("/",(req,res)=>{
-    res.json("Metodo delete")
-})
+rutas.put("/:id",putUsers)
+
+
+
+rutas.delete("/:id",deleteUsers)
 
 
 module.exports=rutas
