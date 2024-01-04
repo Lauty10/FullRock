@@ -1,5 +1,6 @@
 const modeloProducto=require("../modelos/productoSchema")
-
+const{ validationResult }=require("express-validator");
+const cloudinary=require("../helps/cloudinary")
 
 const getProducts= async(req,res)=>{
     try {
@@ -22,21 +23,33 @@ const getProductOne= async (req,res)=>{
 
 
 
-const postProducts=(req,res)=>{
-    try {
-        const {Nombre,Precio,Descripcion,Marca}=req.body
-        if (!Nombre||!Precio||!Descripcion||!Marca) {
-            res.status(500).json({mensaje:"Algun campo se encuentra vacio"})
-            return
-        }else{
-            const newProduct= new modeloProducto(req.body)
-            newProduct.save()
-            res.status(201).json({mensaje:"El producto se creo correctamente",newProduct})
-        }
-
-    } catch (error) {
-        res.status(500).json({mensaje:"ERROR",error})
+const postProducts= async (req,res)=>{
+   try {
+    const{Nombre,Precio,Marca,Descripcion}=req.body
+    if(!Nombre || !Precio || !Marca || !Descripcion) {
+        res.status(500).json({mensaje:"Algun campo se encuentra vacio"})
+        return
     }
+      const err=validationResult(req)
+       if (!err.isEmpty()) {
+            return res.status(422).json({mensaje:err.array()})
+        }
+        const searchName= await modeloProducto.findOne({Nombre})
+        if (searchName) {
+            res.status(500).json({mensaje:"Producto ya existe en la base de datos"})
+           }else{
+            const imageResult= await cloudinary.uploader.upload(req.file.path)
+            const newRockProduct= new modeloProducto({
+            ...req.body,
+            Imagen:imageResult.secure_url
+            })
+            await newRockProduct.save()
+             res.status(200).json({mensaje:"Producto creado correctamente",newRockProduct})
+           }
+        }
+    catch (error) {
+        res.status(500).json({mensaje:"ERROR"})
+   }
 }
 
 const putProducts= async(req,res)=>{
