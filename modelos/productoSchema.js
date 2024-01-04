@@ -16,6 +16,10 @@ const productoModelo= new mongoose.Schema({
         type:String,
         require:true
     },
+    Imagen:{
+        type:String,
+        require:true
+    }
 })
 
 const modeloProducto=mongoose.model("Producto",productoModelo);

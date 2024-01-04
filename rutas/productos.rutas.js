@@ -1,22 +1,16 @@
 const express=require("express")
+const multer=require("../middelworlds/multer")
 const rutas=express.Router()
+const{getProducts,getProductOne,postProducts,putProducts,deleteProduct}=require("../controladores/productos.controladores")
 
-rutas.get("/",(req,res)=>{
-    res.json("Metodo get")
-})
+rutas.get("/",getProducts)
 
-rutas.post("/",(req,res)=>{
-    res.json("Metodo post")
-})
+rutas.get("/:id",getProductOne)
 
+rutas.post("/",multer.single('Imagen'),postProducts)
 
-rutas.put("/",(req,res)=>{
-    res.json("Metodo put")
-})
+rutas.put("/:id",putProducts)
 
-
-rutas.delete("/",(req,res)=>{
-    res.json("Metodo delete")
-})
+rutas.delete("/:id",deleteProduct)
 
 module.exports=rutas
