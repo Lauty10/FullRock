@@ -22,5 +22,10 @@ const usuariosSchema= new mongoose.Schema({
     }
 })
 
+usuariosSchema.methods.toJSON=function(){
+    const {Contrasenia, ...user}=this.toObject()
+    return user
+}
+
 const modeloUsuario=mongoose.model("Usuarios",usuariosSchema)
 module.exports=modeloUsuario
