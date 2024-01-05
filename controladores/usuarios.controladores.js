@@ -72,7 +72,7 @@ const putUsers=async(req,res)=>{
 
 const deleteUsers=async(req,res)=>{
     try {
-        const deleteUs= await usuariosModelo.findByIdAndDelete({_id:req.params.id})
+       await usuariosModelo.findByIdAndDelete({_id:req.params.id})
         res.status(200).json({mensaje:"Usuario eliminado correctamente",deleteUs})
     } catch (error) {
         res.status(500).json({mensaje:'SERVER ERROR'},error)

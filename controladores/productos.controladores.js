@@ -64,7 +64,7 @@ const putProducts= async(req,res)=>{
 
 const deleteProduct= async (req,res)=>{
     try {
-        const deleteProduct= await modeloProducto.findByIdAndDelete({_id:req.params.id})
+        await modeloProducto.findByIdAndDelete({_id:req.params.id})
         res.status(200).json({mensaje:'Producto eliminado correctamente',deleteProduct})
     } catch (error) {
         res.status(500).json({mensaje:"ERROR",error})
