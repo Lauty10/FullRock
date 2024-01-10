@@ -96,7 +96,7 @@ const loginRock= async (req,res)=>{
                 Role:identifiquerUser.Role,
             };
             const token=jwt.sign(payload,process.env.SECRET_KEY,{expiresIn:"1h"});
-            return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:identifiquerUser.Role})
+            return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:payload.Role})
         }else{
             return res.status(401).json({ mensaje: "El usuario y/o la contraseña son incorrectos" });
         }

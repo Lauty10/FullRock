@@ -14,7 +14,7 @@ rutas.post("/",multer.single('Imagen'),[
         check("Precio","Campo Vacio").isEmpty(),
         check("Descripcion","Campo Vacio").isEmpty(),
         check("Marca","Campo Vacio").isEmpty(),
-        check("Imagen","Campo Vacio").isFile()
+        check("Imagen","Campo Vacio").isEmpty()
         
 ],postProducts)
 
@@ -24,7 +24,7 @@ rutas.put("/:id",[
     check("Precio","Campo Vacio").isEmpty(),
     check("Descripcion","Campo Vacio").isEmpty(),
     check("Marca","Campo Vacio").isEmpty(),
-    check("Imagen","Campo Vacio").isFile()
+    check("Imagen","Campo Vacio").isEmpty()
 
 ],putProducts)
 
