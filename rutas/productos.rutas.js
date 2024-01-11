@@ -8,25 +8,9 @@ rutas.get("/",getProducts)
 
 rutas.get("/:id",getProductOne)
 
-rutas.post("/",multer.single('Imagen'),[
-        check("Nombre","Campo Vacio").isEmpty(),
-        check("Precio","El formato no es correcto").isNumeric(),
-        check("Precio","Campo Vacio").isEmpty(),
-        check("Descripcion","Campo Vacio").isEmpty(),
-        check("Marca","Campo Vacio").isEmpty(),
-        check("Imagen","Campo Vacio").isEmpty()
-        
-],postProducts)
+rutas.post("/",multer.single('Imagen'),postProducts)
 
-rutas.put("/:id",[
-    check("Nombre","Campo Vacio").isEmpty(),
-    check("Precio","El formato no es correcto").isNumeric(),
-    check("Precio","Campo Vacio").isEmpty(),
-    check("Descripcion","Campo Vacio").isEmpty(),
-    check("Marca","Campo Vacio").isEmpty(),
-    check("Imagen","Campo Vacio").isEmpty()
-
-],putProducts)
+rutas.put("/:id",putProducts)
 
 rutas.delete("/:id",deleteProduct)
 
