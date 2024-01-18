@@ -67,7 +67,7 @@ const putUsers=async(req,res)=>{
         const updeteUsers= await usuariosModelo.findByIdAndUpdate({_id:req.params.id},req.body,{new:true})
         res.status(200).json({mensaje:'Usuario actualizado correctamente',updeteUsers})
     } catch (error) {
-        res.status(500).json({mensaje:'SERVER ERROR'},error)
+        res.status(500).json({mensaje:'SERVER ERROR',error})
     }
     }
 
@@ -75,9 +75,9 @@ const putUsers=async(req,res)=>{
 const deleteUsers=async(req,res)=>{
     try {
        await usuariosModelo.findByIdAndDelete({_id:req.params.id})
-        res.status(200).json({mensaje:"Usuario eliminado correctamente",deleteUs})
+        res.status(200).json({mensaje:"Usuario eliminado correctamente"})
     } catch (error) {
-        res.status(500).json({mensaje:'SERVER ERROR'},error)
+        res.status(500).json({mensaje:'SERVER ERROR',error})
     }
 }
 

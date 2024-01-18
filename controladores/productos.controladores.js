@@ -12,6 +12,7 @@ const getProducts= async(req,res)=>{
 }
 
 
+
 const getProductOne= async (req,res)=>{
     try {
         const getAllProductsOne= await modeloProducto.findOne({_id:req.params.id})
