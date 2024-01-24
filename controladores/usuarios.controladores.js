@@ -4,6 +4,8 @@ const{ validationResult }=require("express-validator");
 let bcrypt = require('bcryptjs');
 let jwt=require("jsonwebtoken");
 const modeloUsuario = require("../modelos/usuariosSchema");
+const carrModel = require("../modelos/carrSchema");
+const favModel = require("../modelos/favSchema");
 
 
 
@@ -49,7 +51,16 @@ const postUsers=async(req,res)=>{
 
     newUser.Contrasenia = bcrypt.hashSync(Contrasenia,saltPass)
 
+    const newCarr= new carrModel({idUsuario: newUser._id})
+    
+    const newFav= new favModel({idUsuario: newUser._id})
+
+    newUser.idCarr= newCarr._id
+    newUser.idFav=newFav._id
+
     await newUser.save()
+    await newCarr.save()
+    await newFav.save()
     
     res.status(200).json({mensaje:"Usuario creado correctamente",newUser})
 
@@ -67,7 +78,7 @@ const putUsers=async(req,res)=>{
         const updeteUsers= await usuariosModelo.findByIdAndUpdate({_id:req.params.id},req.body,{new:true})
         res.status(200).json({mensaje:'Usuario actualizado correctamente',updeteUsers})
     } catch (error) {
-        res.status(500).json({mensaje:'SERVER ERROR'},error)
+        res.status(500).json({mensaje:'SERVER ERROR',error})
     }
     }
 
@@ -75,34 +86,36 @@ const putUsers=async(req,res)=>{
 const deleteUsers=async(req,res)=>{
     try {
        await usuariosModelo.findByIdAndDelete({_id:req.params.id})
-        res.status(200).json({mensaje:"Usuario eliminado correctamente",deleteUs})
+        res.status(200).json({mensaje:"Usuario eliminado correctamente"})
     } catch (error) {
-        res.status(500).json({mensaje:'SERVER ERROR'},error)
+        res.status(500).json({mensaje:'SERVER ERROR',error})
     }
 }
 
-const loginRock= async (req,res)=>{
-    try {
-        const {Contrasenia,Correo}=req.body
-        const identifiquerUser= await modeloUsuario.findOne({Correo})
-        if (!identifiquerUser) {
-            res.status(500).json({mensaje:"El usuario y/o la contraseña son incorrectos"})
-            return
+    const loginRock= async (req,res)=>{
+        try {
+            const {Contrasenia,Correo}=req.body
+            const identifiquerUser= await modeloUsuario.findOne({Correo})
+            if (!identifiquerUser) {
+                res.status(500).json({mensaje:"El usuario y/o la contraseña son incorrectos"})
+                return
+            }
+            const comparePassaword= await bcrypt.compare(Contrasenia,identifiquerUser.Contrasenia)
+            if (comparePassaword) {
+                const payload={
+                    idUsuario:identifiquerUser._id,
+                    idCarrito:identifiquerUser.idCarrito,
+                    idFav:identifiquerUser.idFav,
+                    Role:identifiquerUser.Role,
+                };
+                const token=jwt.sign(payload,process.env.SECRET_KEY,{expiresIn:"1h"});
+                return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:identifiquerUser.Role,idUsuario:identifiquerUser._id});
+            }else{
+                return res.status(401).json({ mensaje: "El usuario y/o la contraseña son incorrectos" });
+            }
+        } catch (error) {
+            return res.status(500).json({ mensaje: 'Error interno del servidor' });
         }
-        const comparePassaword= await bcrypt.compare(Contrasenia,identifiquerUser.Contrasenia)
-        if (comparePassaword) {
-            const payload={
-                id:identifiquerUser._id,
-                Role:identifiquerUser.Role,
-            };
-            const token=jwt.sign(payload,process.env.SECRET_KEY,{expiresIn:"1h"});
-            return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:identifiquerUser.Role})
-        }else{
-            return res.status(401).json({ mensaje: "El usuario y/o la contraseña son incorrectos" });
-        }
-    } catch (error) {
-        return res.status(500).json({ mensaje: 'Error interno del servidor' });
-    }
 }
 
 

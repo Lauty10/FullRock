@@ -16,8 +16,7 @@ class Servidor{
     }
 
     rutas(){
-        this.aplicacion.use('/productos',require('../rutas/productos.rutas'));
-        this.aplicacion.use('/usuarios',require('../rutas/usuarios.rutas'));
+       this.aplicacion.use(require("../rutas"))
     }
 
     listen(){

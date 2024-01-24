@@ -6,6 +6,9 @@ const auth = (role) => async (req, res, next) => {
     const verify = jwt.verify(token, process.env.SECRET_KEY);
 
     if (verify && verify.role === role) {
+      req.idUsuario=verify.id;
+      req.idCarrito=verify.idCarrito;
+      req.idFav=verify.idFav;
       next();
     } else {
       res.status(401).json({ mensaje: "No estás autorizado" });
