@@ -4,6 +4,8 @@ const{ validationResult }=require("express-validator");
 let bcrypt = require('bcryptjs');
 let jwt=require("jsonwebtoken");
 const modeloUsuario = require("../modelos/usuariosSchema");
+const carrModel = require("../modelos/carrSchema");
+const favModel = require("../modelos/favSchema");
 
 
 
@@ -49,7 +51,16 @@ const postUsers=async(req,res)=>{
 
     newUser.Contrasenia = bcrypt.hashSync(Contrasenia,saltPass)
 
+    const newCarr= new carrModel({idUsuario: newUser._id})
+    
+    const newFav= new favModel({idUsuario: newUser._id})
+
+    newUser.idCarr= newCarr._id
+    newUser.idFav=newFav._id
+
     await newUser.save()
+    await newCarr.save()
+    await newFav.save()
     
     res.status(200).json({mensaje:"Usuario creado correctamente",newUser})
 
@@ -92,11 +103,13 @@ const deleteUsers=async(req,res)=>{
             const comparePassaword= await bcrypt.compare(Contrasenia,identifiquerUser.Contrasenia)
             if (comparePassaword) {
                 const payload={
-                    id:identifiquerUser._id,
+                    idUsuario:identifiquerUser._id,
+                    idCarrito:identifiquerUser.idCarrito,
+                    idFav:identifiquerUser.idFav,
                     Role:identifiquerUser.Role,
                 };
                 const token=jwt.sign(payload,process.env.SECRET_KEY,{expiresIn:"1h"});
-                return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:identifiquerUser.Role});
+                return res.status (200).json ({mensaje:"Usuario Logeado",token,Role:identifiquerUser.Role,idUsuario:identifiquerUser._id});
             }else{
                 return res.status(401).json({ mensaje: "El usuario y/o la contraseña son incorrectos" });
             }

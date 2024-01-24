@@ -1,5 +1,5 @@
-const mongoose=require("mongoose")
-const productoModelo= new mongoose.Schema({
+const {Schema,model}=require("mongoose")
+const productoModelo= new Schema({
     Nombre:{
         type:String,
         require:true
@@ -22,5 +22,5 @@ const productoModelo= new mongoose.Schema({
     }
 })
 
-const modeloProducto=mongoose.model("Producto",productoModelo);
+const modeloProducto=model("Producto",productoModelo);
 module.exports=modeloProducto

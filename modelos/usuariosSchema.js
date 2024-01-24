@@ -1,5 +1,5 @@
-const mongoose=require("mongoose")
-const usuariosSchema= new mongoose.Schema({
+const {Schema,model, Types}=require("mongoose")
+const usuariosSchema= new Schema({
     Nombre:{
         type:String,
         require:true
@@ -19,7 +19,14 @@ const usuariosSchema= new mongoose.Schema({
     Role:{
         type:String,
         default:"user"
+    },
+    idCarrito:{
+      type:Types.ObjectId
+    },
+    idFav:{
+        type:Types.ObjectId
     }
+
 })
 
 usuariosSchema.methods.toJSON=function(){
@@ -27,5 +34,5 @@ usuariosSchema.methods.toJSON=function(){
     return user
 }
 
-const modeloUsuario=mongoose.model("Usuarios",usuariosSchema)
+const modeloUsuario=model("Usuarios",usuariosSchema)
 module.exports=modeloUsuario
