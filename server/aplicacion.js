@@ -12,6 +12,7 @@ class Servidor{
     middlewars(){
         this.aplicacion.use(express.json());
         this.aplicacion.use(morgan('dev'));
+        this.aplicacion.use(express.urlencoded({extended:true}))
         this.aplicacion.use(cors())
     }
 
