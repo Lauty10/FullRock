@@ -20,7 +20,7 @@ const usuariosSchema= new Schema({
         type:String,
         default:"user"
     },
-    idCarrito:{
+    idCarr:{
       type:Types.ObjectId
     },
     idFav:{

@@ -11,9 +11,9 @@ rutas.get("/:id",getProductOne)
 
 rutas.post("/",multer.single('Imagen'),postProducts)
 
-rutas.post("/cart/:idProd",auth('usuarios'),carrProduct)
+rutas.post("/cart/:idProd",auth('user'),carrProduct)
 
-rutas.post("/fav/:idProd",auth('usuarios'),favProduct)
+rutas.post("/fav/:idProd",auth('user'),favProduct)
 
 rutas.put("/:id",putProducts)
 
