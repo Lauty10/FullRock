@@ -15,8 +15,8 @@ rutas.post("/cart/:idProd",auth('user'),carrProduct)
 
 rutas.post("/fav/:idProd",auth('user'),favProduct)
 
-rutas.put("/:id",putProducts)
+rutas.put("/:id",auth('admin'),putProducts)
 
-rutas.delete("/:id",deleteProduct)
+rutas.delete("/:id",auth('admin'),deleteProduct)
 
 module.exports=rutas

@@ -4,7 +4,7 @@ const { carrProduct, deleteCarr } = require("../controladores/carr.controladores
 const rutas=express.Router()
 const auth = require("../middelworlds/auth")
 
-rutas.get("/",carrProduct)
+rutas.get("/",auth('user'),carrProduct)
 
 rutas.delete("/:idProductCarr",auth('user'),deleteCarr)
 
