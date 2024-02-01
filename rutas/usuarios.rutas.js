@@ -24,18 +24,18 @@ rutas.post("/login",[
 ],loginRock)
 
 rutas.put("/:id",[
-    check("Correo","No se puede actulizar con campo vacio").notEmpty(),
-    check("Correo","No se puede actulizar con este formato").isEmail(),
+    check("Correo","No se puede actualizar con campo vacio").notEmpty(),
+    check("Correo","No se puede actualizar con este formato").isEmail(),
     check("Nombre","El formato no es correcto para actualizar").isAlpha(),
     check("Nombre","El nombre es muy largo para actualizar").isLength({min:2, max:20}),
-    check("Nombre","No se puede actulizar con campo vacio").isEmpty(),
-    check("Contrasenia","No se puede actulizar con campo vacio").isEmpty(),
+    check("Nombre","No se puede actualizar con campo vacio").isEmpty(),
+    check("Contrasenia","No se puede actualizar con campo vacio").isEmpty(),
     check("Contrasenia","La clave es muy corta para actualizar").isLength({min:8,max:16}),
     check("Nacionalidad","El formato es incorrecto para actualizar").isAlpha(),
-    check("Nacionalidad","No se puede actulizar con campo vacio").isEmpty()
-],putUsers)
+    check("Nacionalidad","No se puede actualizar con campo vacio").isEmpty()
+],auth('admin'),putUsers)
 
-rutas.delete("/:id",deleteUsers)
+rutas.delete("/:id",auth('admin'),deleteUsers)
 
 
 module.exports=rutas
