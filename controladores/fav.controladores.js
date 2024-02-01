@@ -15,13 +15,11 @@ const deletefav = async (req, res) => {
         const favProd = await favModel.findOne({ _id: req.idFav });
         const productFav = await modeloProducto.findOne({ _id: req.params.idProduct });
 
-        // Validar si el producto está en la lista de favoritos
         const deleteAFav = favProd.favoritos.find((data) => data._id.toString() === productFav._id.toString());
         if (!deleteAFav) {
             return res.status(400).json({ mensaje: "El producto no está en la lista de favoritos" });
         }
 
-        // Filtrar la lista de favoritos para eliminar el producto
         const deleteNFav = favProd.favoritos.filter((data) => data._id.toString() !== productFav._id.toString());
 
         favProd.favoritos = deleteNFav;

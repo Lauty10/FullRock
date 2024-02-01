@@ -1,5 +1,7 @@
 const carrModel = require("../modelos/carrSchema");
 const modeloProducto = require("../modelos/productoSchema");
+const {MercadoPagoConfig,Preference}=require("mercadopago")
+const client = new MercadoPagoConfig({ accessToken: `${process.env.ACCESS_TOKEN}` });
 
 const carrProduct=async(req,res)=>{
     try {
@@ -33,7 +35,38 @@ const deleteCarr=async(req,res)=>{
     }
 }
 
+const CarPay=async(req,res)=>{
+    try {
+        const {title,price,quantity}=req.body
+        const body = {
+            items: [
+              {
+                title: title,   
+                quantity: quantity,
+                unit_price: price,
+                currency_id: "ARS",
+              },
+            ],
+            back_urls: {
+              success: `${process.env.URL_FRONT}`,
+              failure: `${process.env.URL_FRONT}`,
+              pending: `${process.env.URL_FRONT}`,
+            },
+            auto_return: "approved",
+          }; 
+
+        const preference = new Preference(client);
+        const result = await preference.create({ body }); 
+        console.log(result.init_point);
+        res.status(200).json({res:result.init_point})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 module.exports={
     carrProduct,
-    deleteCarr
+    deleteCarr,
+    CarPay
 }
