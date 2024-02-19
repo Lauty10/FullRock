@@ -1,5 +1,4 @@
 let jwt=require("jsonwebtoken");
-
 const auth = (role) => async (req, res, next) => {
   try {
     const token =JSON.parse(req.header("Authorization"));
