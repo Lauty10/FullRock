@@ -1,7 +1,8 @@
 let jwt=require("jsonwebtoken");
+
 const auth = (role) => async (req, res, next) => {
   try {
-    const token =JSON.parse(req.header("Authorization"));
+    const token = req.header("Authorization").replace('Bearer ', '');
     if (!token) {
       return res.status(400).json({mensaje:"Token incorrecto"})
     }
@@ -16,7 +17,6 @@ const auth = (role) => async (req, res, next) => {
       res.status(401).json({ mensaje: "No estás autorizado" });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ mensaje: "Error en el servidor", error });
   }
 }
