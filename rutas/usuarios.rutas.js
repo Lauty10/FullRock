@@ -1,6 +1,6 @@
 const express=require("express")
 const rutas = express.Router()
-const {getUsers,getUsersOne,postUsers,deleteUsers,putUsers,loginRock}=require("../controladores/usuarios.controladores")
+const {getUsers,getUsersOne,postUsers,deleteUsers,putUsers,loginRock, newpass}=require("../controladores/usuarios.controladores")
 const {check}=require("express-validator")
 const auth = require("../middelworlds/auth")
 
@@ -23,6 +23,8 @@ rutas.post("/login",[
     
 ],loginRock)
 
+rutas.put("/pass",newpass)
+
 rutas.put("/:id",[
     check("Correo","No se puede actualizar con campo vacio").notEmpty(),
     check("Correo","No se puede actualizar con este formato").isEmail(),
@@ -34,6 +36,8 @@ rutas.put("/:id",[
     check("Nacionalidad","El formato es incorrecto para actualizar").isAlpha(),
     check("Nacionalidad","No se puede actualizar con campo vacio").isEmpty()
 ],auth('admin'),putUsers)
+
+
 
 rutas.delete("/:id",auth('admin'),deleteUsers)
 

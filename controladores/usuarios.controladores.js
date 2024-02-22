@@ -83,6 +83,61 @@ const putUsers=async(req,res)=>{
     }
 
 
+    const newpass= async (req,res)=>{
+        console.log(req.body);
+        try {
+            const{Nombre,Correo,Contrasenia}=req.body
+
+            console.log("1");
+
+            const userExits= await usuariosModelo.findOne({Correo})
+
+            console.log("2");
+
+            if (!userExits) {
+                res.status(500).json({mensaje:"El dato no existe en nuestra base de datos."})
+                return
+            }
+
+            console.log("3");
+
+            const userExitsName= await usuariosModelo.findOne({Nombre})
+
+            console.log("4"); 
+
+            if (!userExitsName) {
+                res.status(500).json({mensaje:"El dato no existe en nuestra base de datos."})
+                return
+            }
+            console.log("5");
+
+            const salt = await bcrypt.genSalt(10); 
+
+            console.log("6");
+
+            const hashedPassword = await bcrypt.hash(Contrasenia, salt);
+
+            const updetePass={
+                Nombre,
+                Correo,
+                Contrasenia:hashedPassword
+            }
+
+           console.log("7");
+   
+            await usuariosModelo.findByIdAndUpdate({ _id: userExits._id },updetePass,{new:true});
+
+            console.log("8");
+
+            return res.status(200).json({ mensaje: "La contraseña ha sido restablecida correctamente." });
+
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 const deleteUsers=async(req,res)=>{
     try {
        await usuariosModelo.findByIdAndDelete({_id:req.params.id})
@@ -125,6 +180,7 @@ const deleteUsers=async(req,res)=>{
         getUsersOne,
         postUsers,
         putUsers,
+        newpass,
         deleteUsers,
         loginRock
     }
