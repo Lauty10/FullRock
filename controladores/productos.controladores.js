@@ -56,14 +56,28 @@ const postProducts= async (req,res)=>{
    }
 }
 
-const putProducts= async(req,res)=>{
+const putProducts = async (req, res) => {
     try {
-        const updateProduct= await modeloProducto.findByIdAndUpdate({_id:req.params.id},req.body,{new:true})
-        res.status(200).json({mensaje:'Producto actualizado correctamente',updateProduct})
+        const productoActual = await modeloProducto.findById(req.params.id);
+
+        if (!productoActual) {
+            return res.status(404).json({ mensaje: "Producto no encontrado" });
+        }
+        const cambios = Object.keys(req.body).some((key) => req.body[key] !== productoActual[key]);
+
+        if (!cambios) {
+            return res.status(400).json({ mensaje: "No hay cambios para actualizar" });
+        }
+
+        const updateProduct = await modeloProducto.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        res.status(200).json({ mensaje: 'Producto actualizado correctamente', updateProduct });
+
     } catch (error) {
-        res.status(500).json({mensaje:"ERROR",error})
+        res.status(500).json({ mensaje: "ERROR", error });
     }
-}
+};
+
 
 
 const deleteProduct= async (req,res)=>{

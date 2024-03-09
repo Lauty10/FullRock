@@ -73,14 +73,31 @@ const postUsers=async(req,res)=>{
 
 
 
-const putUsers=async(req,res)=>{
+const putUsers = async (req, res) => {
     try {
-        const updeteUsers= await usuariosModelo.findByIdAndUpdate({_id:req.params.id},req.body,{new:true})
-        res.status(200).json({mensaje:'Usuario actualizado correctamente',updeteUsers})
+
+        const usuarioActual = await usuariosModelo.findById(req.params.id);
+
+        if (!usuarioActual) {
+            return res.status(404).json({ mensaje: "Usuario no encontrado" });
+        }
+
+        const cambios = Object.keys(req.body).some((key) => { return req.body[key] !== usuarioActual[key];
+        });
+
+        if (!cambios) {
+            return res.status(400).json({ mensaje: "No hay cambios para actualizar" });
+        }
+
+        const updateUsers = await usuariosModelo.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        res.status(200).json({ mensaje: 'Usuario actualizado correctamente', updateUsers });
+
     } catch (error) {
-        res.status(500).json({mensaje:'SERVER ERROR',error})
+        res.status(500).json({ mensaje: 'SERVER ERROR', error });
     }
-    }
+};
+
 
 
     const newpass= async (req,res)=>{
